@@ -1,0 +1,35 @@
+@model List<BackendLearningHub.Modelos.Aula>
+@{
+    ViewData["Titulo"] = "Inicio";
+}
+
+<section class="hero-panel">
+    <div>
+        <p class="eyebrow">Apoio Escolar</p>
+        <h1>Plataforma de Ensino Fundamental</h1>
+        <p>
+            Explore disciplinas como Matemática e Ciências. Assista aos vídeos das aulas e marque seu progresso
+            para não se perder nos estudos.
+        </p>
+        <div class="actions-row">
+            <a class="btn-primary" asp-controller="Conta" asp-action="Login">Entrar no sistema</a>
+            <a class="btn-ghost" asp-controller="Cursos" asp-action="Index">Ver minhas disciplinas</a>
+        </div>
+    </div>
+</section>
+
+<section class="section-heading">
+    <p class="eyebrow">Catalogo</p>
+    <h2>Algumas videoaulas cadastradas</h2>
+</section>
+
+<section class="aula-grid">
+    @foreach (var aula in Model)
+    {
+        <article class="aula-card">
+            <h3>@aula.Titulo</h3>
+            <p>@aula.Resumo</p>
+            <small style="text-align: right; margin-top: auto; color: var(--text-secondary);">@aula.TempoEstimado</small>
+        </article>
+    }
+</section>

@@ -1,0 +1,91 @@
+@model List<BackendLearningHub.Modelos.Aula>
+@using BackendLearningHub.Modelos
+@{
+    ViewData["Titulo"] = "Administração";
+    var unidades = (List<UnidadeCurso>)ViewBag.Unidades;
+}
+
+<section class="dashboard-header">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1>Cadastro de aulas</h1>
+        <p>Cadastre uma aula nova ou altere se ela aparece para o aluno.</p>
+    </div>
+</section>
+
+@if (TempData["Message"] is not null)
+{
+    <div class="notice">@TempData["Message"]</div>
+}
+
+<section class="admin-grid">
+    <form asp-action="CriarAula" method="post" class="form-card">
+        <h2>Nova aula</h2>
+        <label>
+            Tópico
+            <select name="TopicoId" required>
+                @foreach (var unidade in unidades)
+                {
+                    @foreach (var topico in unidade.Topicos)
+                    {
+                        <option value="@topico.Id">@unidade.Name - @topico.Name</option>
+                    }
+                }
+            </select>
+        </label>
+        <label>
+            Título
+            <input name="Titulo" required />
+        </label>
+        <label>
+            Resumo
+            <textarea name="Resumo" rows="4" required></textarea>
+        </label>
+        <label>
+            Link do YouTube (Opcional)
+            <input name="VideoUrl" placeholder="Ex: https://www.youtube.com/embed/..." />
+        </label>
+        <label>
+            Tempo estimado
+            <input name="TempoEstimado" value="30 min" />
+        </label>
+        <label class="checkbox-line">
+            <input name="Publicada" type="checkbox" value="true" checked />
+            Publicar aula
+        </label>
+        <button class="btn-primary" type="submit">Cadastrar aula</button>
+    </form>
+
+    <section class="table-card">
+        <h2>Aulas cadastradas</h2>
+        <div class="responsive-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aula</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var aula in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@aula.Titulo</strong>
+                                <span>@aula.Resumo</span>
+                            </td>
+                            <td>@(aula.Publicada ? "Publicada" : "Rascunho")</td>
+                            <td>
+                                <form asp-action="AlternarPublicacao" method="post">
+                                    <input type="hidden" name="aulaId" value="@aula.Id" />
+                                    <button type="submit">Alternar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>

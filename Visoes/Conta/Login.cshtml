@@ -1,0 +1,35 @@
+@model BackendLearningHub.Modelos.LoginViewModel
+@{
+    ViewData["Titulo"] = "Login";
+}
+
+<section class="auth-card">
+    <div>
+        <p class="eyebrow">Login</p>
+        <h1>Entrar no sistema</h1>
+        <p>Use um usuário de teste para acessar como aluno ou administrador.</p>
+        <div class="demo-users">
+            <span>Admin: professor@escola.com / admin123</span>
+            <span>Aluno: aluno@escola.com / aluno123</span>
+        </div>
+    </div>
+
+    <form asp-action="Login" method="post" class="form-card">
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+        <label>
+            E-mail
+            <input asp-for="Email" autocomplete="username" />
+            <span asp-validation-for="Email"></span>
+        </label>
+        <label>
+            Senha
+            <input asp-for="Password" autocomplete="current-password" />
+            <span asp-validation-for="Password"></span>
+        </label>
+        <button class="btn-primary" type="submit">Entrar</button>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

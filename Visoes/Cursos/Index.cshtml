@@ -1,0 +1,60 @@
+@model BackendLearningHub.Modelos.PainelCursoViewModel
+@{
+    ViewData["Titulo"] = "Meu painel";
+}
+
+<section class="dashboard-header">
+    <div>
+        <p class="eyebrow">Aluno</p>
+        <h1>Minhas videoaulas escolares</h1>
+        <p>Assista aos vídeos e marque as aulas que já estudou para acompanhar seu andamento.</p>
+    </div>
+    <div class="progress-card">
+        <span>@Model.PercentualConclusao%</span>
+        <p>@Model.IdsAulasConcluidas.Count de @Model.AulasPublicadas aulas concluídas</p>
+        <div class="progress-track">
+            <div style="width: @Model.PercentualConclusao%"></div>
+        </div>
+    </div>
+</section>
+
+<section class="unidade-stack">
+    @foreach (var unidade in Model.Unidades)
+    {
+        <article class="unidade-panel">
+            <header>
+                <h2>@unidade.Name</h2>
+                <p>@unidade.Description</p>
+            </header>
+
+            <div class="topico-grid">
+                @foreach (var topico in unidade.Topicos)
+                {
+                    <section class="topico-panel">
+                        <h3>@topico.Name</h3>
+                        <p>@topico.Description</p>
+                        <div class="aula-list">
+                            @foreach (var aula in topico.Aulas)
+                            {
+                                var completed = Model.IdsAulasConcluidas.Contains(aula.Id);
+                                <form asp-action="AlternarProgresso" method="post" class="aula-row @(completed ? "done" : "")">
+                                    <input type="hidden" name="aulaId" value="@aula.Id" />
+                                    <button type="submit" aria-label="Alternar progresso"></button>
+                                    <div>
+                                        <strong>@aula.Titulo</strong>
+                                        <span>@aula.Resumo</span>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(aula.VideoUrl))
+                                    {
+                                        <a href="@aula.VideoUrl" target="_blank" class="btn-ghost" style="padding: 4px 10px; min-height: auto; font-size: 0.85rem; margin: auto 0;">Assistir</a>
+                                    }
+                                    <small style="margin: auto 0; min-width: 60px; text-align: right; color: var(--text-secondary);">@aula.TempoEstimado</small>
+                                </form>
+                            }
+                        </div>
+                    </section>
+                }
+            </div>
+        </article>
+    }
+</section>
